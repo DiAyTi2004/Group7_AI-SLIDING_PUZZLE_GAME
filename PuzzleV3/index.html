@@ -1,12 +1,56 @@
 <!DOCTYPE html>
 <html>
-  <head>
-    <script src="https://cdn.jsdelivr.net/npm/p5@1.4.1/lib/p5.min.js"></script>
-    <meta charset="utf-8" />
-  </head>
 
-  <body>
-    <script src="tile.js"></script>
-    <script src="sketch.js"></script>
-  </body>
+<head>
+  <script src="https://cdn.jsdelivr.net/npm/p5@1.4.1/lib/p5.min.js"></script>
+  <meta charset="utf-8" />
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.2/css/all.min.css"
+    integrity="sha512-z3gLpd7yknf1YoNbCzqRKc4qyor8gaKU1qmn+CShxbuBusANI9QpRohGBreCFkKxLhei6S9CQXFEbbKuqLg0DA=="
+    crossorigin="anonymous" referrerpolicy="no-referrer" />
+  <link rel="stylesheet" href="../style.css">
+
+  <title>Sliding Tile Puzzle</title>
+</head>
+
+<body>
+  <div class="mainApp">
+    <div class="menu">
+      <div class="">
+        GROUP 7
+      </div>
+      <ul>
+        <li>
+          <a href="../index.html">
+            <i class="fa-solid fa-border-all" style="margin-right: 4px;"></i>
+            Easy Mode
+          </a>
+        </li>
+        <li>
+          <a href="../index.html">
+            <i class="fa-solid fa-chess-board" style="margin-right: 4px;"></i>
+            Medium Mode
+          </a>
+        </li>
+        <li>
+          <a href="../PuzzleV2/index.html">
+            <i class="fa-solid fa-chess-board" style="margin-right: 4px;"></i>
+            Puzzle Camera
+          </a>
+        </li>
+        <li>
+          <a href="#">
+            <i class="fa-solid fa-chess-board" style="margin-right: 4px;"></i>
+            Puzzle Image
+          </a>
+        </li>
+      </ul>
+    </div>
+    <div class="appContent" id="appContent">
+
+    </div>
+  </div>
+  <script src="tile.js"></script>
+  <script src="sketch.js"></script>
+</body>
+
 </html>

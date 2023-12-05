@@ -12,8 +12,8 @@ let source;
 
 // Tiles configuration
 let tiles = [];
-let cols = 4;
-let rows = 4;
+let cols = 3;
+let rows = 3;
 let w, h;
 
 // Order of tiles
@@ -25,7 +25,8 @@ function preload() {
 }
 
 function setup() {
-  createCanvas(400, 400);
+  const myCanvas = createCanvas(400, 400);
+  myCanvas.parent('appContent');
   // pixel dimensions of each tiles
   w = width / cols;
   h = height / rows;
