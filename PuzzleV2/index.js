@@ -1,12 +1,12 @@
 var emptyTileRow = 1;
 var emptyTileCol = 2;
-var cellDisplacement = "69px";
+var cellDisplacement = "70px";
 var goal_arr = [
-    [1, 2, 3, 4, 5],
-    [6, 7, 8, 9, 10],
-    [11, 12, 13, 14, 15],
-    [16, 17, 18, 19, 20],
-    [21, 22, 23, 24, 0]
+	[1, 2, 3, 4, 5],
+	[6, 7, 8, 9, 10],
+	[11, 12, 13, 14, 15],
+	[16, 17, 18, 19, 20],
+	[21, 22, 23, 24, 0]
 ];
 heur = "man";
 
@@ -20,6 +20,7 @@ function moveTile() {
 
 	// Move tile down
 	if (posRow + 1 == emptyTileRow && posCol == emptyTileCol) {
+
 		$(this).animate({
 			'top': "+=" + cellDisplacement
 		});
@@ -34,6 +35,7 @@ function moveTile() {
 
 	// Move tile up
 	if (posRow - 1 == emptyTileRow && posCol == emptyTileCol) {
+
 		$(this).animate({
 			'top': "-=" + cellDisplacement
 		});
@@ -48,6 +50,7 @@ function moveTile() {
 
 	// Move tile right
 	if (posRow == emptyTileRow && posCol + 1 == emptyTileCol) {
+
 		$(this).animate({
 			'right': "-=" + cellDisplacement // move right
 		});
@@ -62,6 +65,7 @@ function moveTile() {
 
 	// Move tile left
 	if (posRow == emptyTileRow && posCol - 1 == emptyTileCol) {
+
 		$(this).animate({
 			'right': "+=" + cellDisplacement
 		});
@@ -81,8 +85,6 @@ function moveTile() {
 
 $('.start .cell').click(moveTile);
 window.onkeydown = function (e) {
-	console.log(e.keyCode);
-	// console.log(e.key);
 	const emptyCell = getEmptyCell();
 	const posString = (emptyCell.getAttribute('data-pos'));
 	const posRow = parseInt(posString.split(',')[0]);
@@ -92,6 +94,7 @@ window.onkeydown = function (e) {
 	if (e.keyCode === 37) {
 		if (posCol == 4) return;
 		const nextElement = getCellByPosition(posRow, posCol + 1);
+
 		$(nextElement).animate({
 			'right': "+=" + cellDisplacement
 		});
@@ -99,6 +102,7 @@ window.onkeydown = function (e) {
 		$('#empty').animate({
 			'right': "-=" + cellDisplacement
 		});
+
 
 		emptyTileCol += 1;
 		$(nextElement).attr('data-pos', posRow + "," + (posCol));
@@ -108,6 +112,8 @@ window.onkeydown = function (e) {
 	if (e.keyCode === 39) {
 		if (posCol == 0) return;
 		const nextElement = getCellByPosition(posRow, posCol - 1);
+
+
 		$(nextElement).animate({
 			'right': "-=" + cellDisplacement // move right
 		});
@@ -124,6 +130,8 @@ window.onkeydown = function (e) {
 	if (e.keyCode === 38) {
 		if (posRow == 4) return;
 		const nextElement = getCellByPosition(posRow + 1, posCol);
+
+
 		$(nextElement).animate({
 			'top': "-=" + cellDisplacement
 		});
@@ -140,6 +148,8 @@ window.onkeydown = function (e) {
 	if (e.keyCode === 40) {
 		if (posRow == 0) return;
 		const nextElement = getCellByPosition(posRow - 1, posCol);
+
+
 		$(nextElement).animate({
 			'top': "+=" + cellDisplacement
 		});
@@ -156,6 +166,8 @@ window.onkeydown = function (e) {
 	if (!isShuffle) checkWinState();
 
 }
+
+
 
 function getEmptyCell() {
 	return document.getElementById('empty');
@@ -174,7 +186,7 @@ function getCellByPosition(posX, posY) {
  * @param {ANode} state - represents  the state of the board as a 2D array
  * @param {int} emptyRow - represents  empty row no.
  * @param {int} emptyCol - represents  empty column no.
- * @param {int} depth - represents  empty column no.
+ * @param {int} depth 
  */
 function ANode(value, state, emptyRow, emptyCol, depth) {
 	this.value = value;
@@ -314,7 +326,7 @@ AStar.prototype.heuristic = function (node) {
 }
 
 function getCurrentTileState() {
-	tileState = [[], [], []];
+	tileState = [[], [], [], [], []];
 
 	$(".start .cell").each(function (i, obj) {
 		temp_pos = $(this).attr("data-pos");
@@ -417,37 +429,56 @@ function shuffle(array) {
 }
 
 function movementMap(dataPos) {
-    if (dataPos == "0,0") return ["0,1", "1,0"];
-    if (dataPos == "0,1") return ["0,0", "0,2", "1,1"];
-    if (dataPos == "0,2") return ["0,1", "0,3", "1,2"];
-    if (dataPos == "0,3") return ["0,2", "0,4", "1,3"];
-    if (dataPos == "0,4") return ["0,3", "1,4"];
+	if (dataPos == "0,0") return ["0,1", "1,0"];
+	if (dataPos == "0,1") return ["0,0", "0,2", "1,1"];
+	if (dataPos == "0,2") return ["0,1", "0,3", "1,2"];
+	if (dataPos == "0,3") return ["0,2", "0,4", "1,3"];
+	if (dataPos == "0,4") return ["0,3", "1,4"];
 
-    if (dataPos == "1,0") return ["0,0", "1,1", "2,0"];
-    if (dataPos == "1,1") return ["0,1", "1,0", "1,2", "2,1"];
-    if (dataPos == "1,2") return ["0,2", "1,1", "1,3", "2,2"];
-    if (dataPos == "1,3") return ["0,3", "1,2", "1,4", "2,3"];
-    if (dataPos == "1,4") return ["0,4", "1,3", "2,4"];
+	if (dataPos == "1,0") return ["0,0", "1,1", "2,0"];
+	if (dataPos == "1,1") return ["0,1", "1,0", "1,2", "2,1"];
+	if (dataPos == "1,2") return ["0,2", "1,1", "1,3", "2,2"];
+	if (dataPos == "1,3") return ["0,3", "1,2", "1,4", "2,3"];
+	if (dataPos == "1,4") return ["0,4", "1,3", "2,4"];
 
-    if (dataPos == "2,0") return ["1,0", "2,1", "3,0"];
-    if (dataPos == "2,1") return ["1,1", "2,0", "2,2", "3,1"];
-    if (dataPos == "2,2") return ["1,2", "2,1", "2,3", "3,2"];
-    if (dataPos == "2,3") return ["1,3", "2,2", "2,4", "3,3"];
-    if (dataPos == "2,4") return ["1,4", "2,3", "3,4"];
+	if (dataPos == "2,0") return ["1,0", "2,1", "3,0"];
+	if (dataPos == "2,1") return ["1,1", "2,0", "2,2", "3,1"];
+	if (dataPos == "2,2") return ["1,2", "2,1", "2,3", "3,2"];
+	if (dataPos == "2,3") return ["1,3", "2,2", "2,4", "3,3"];
+	if (dataPos == "2,4") return ["1,4", "2,3", "3,4"];
 
-    if (dataPos == "3,0") return ["2,0", "3,1", "4,0"];
-    if (dataPos == "3,1") return ["2,1", "3,0", "3,2", "4,1"];
-    if (dataPos == "3,2") return ["2,2", "3,1", "3,3", "4,2"];
-    if (dataPos == "3,3") return ["2,3", "3,2", "3,4", "4,3"];
-    if (dataPos == "3,4") return ["2,4", "3,3", "4,4"];
+	if (dataPos == "3,0") return ["2,0", "3,1", "4,0"];
+	if (dataPos == "3,1") return ["2,1", "3,0", "3,2", "4,1"];
+	if (dataPos == "3,2") return ["2,2", "3,1", "3,3", "4,2"];
+	if (dataPos == "3,3") return ["2,3", "3,2", "3,4", "4,3"];
+	if (dataPos == "3,4") return ["2,4", "3,3", "4,4"];
 
-    if (dataPos == "4,0") return ["3,0", "4,1"];
-    if (dataPos == "4,1") return ["3,1", "4,0", "4,2"];
-    if (dataPos == "4,2") return ["3,2", "4,1", "4,3"];
-    if (dataPos == "4,3") return ["3,3", "4,2", "4,4"];
-    if (dataPos == "4,4") return ["3,4", "4,3"];
+	if (dataPos == "4,0") return ["3,0", "4,1"];
+	if (dataPos == "4,1") return ["3,1", "4,0", "4,2"];
+	if (dataPos == "4,2") return ["3,2", "4,1", "4,3"];
+	if (dataPos == "4,3") return ["3,3", "4,2", "4,4"];
+	if (dataPos == "4,4") return ["3,4", "4,3"];
 
-    return [];
+	return [];
+}
+
+function roundToNearest70(value) {
+	var numericValue = parseFloat(value); // Extract numeric part
+	var roundedValue = Math.round(numericValue / 70) * 70; // Round to nearest multiple of 70
+	return roundedValue + "px";
+}
+
+function alignTiles() {
+	$(".start .cell").each(function (i, obj) {
+		var style = window.getComputedStyle(this);
+
+		var topValue = style.getPropertyValue("top");
+		var rightValue = style.getPropertyValue("right");
+
+		this.style.top = roundToNearest70(topValue);
+		this.style.right = roundToNearest70(rightValue);
+
+	});
 }
 
 function shuffleTiles() {
@@ -468,6 +499,8 @@ function shuffleTiles() {
 		}
 	}
 	isShuffle = false;
+
+	alignTiles();
 }
 
 function checkWinCondition() {

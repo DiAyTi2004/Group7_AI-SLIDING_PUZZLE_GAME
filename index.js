@@ -1,6 +1,6 @@
 var emptyTileRow = 1;
 var emptyTileCol = 2;
-var cellDisplacement = "69px";
+var cellDisplacement = "70px";
 var goal_arr = [[1, 2, 3], [4, 5, 6], [7, 8, 0]];
 heur = "man";
 
