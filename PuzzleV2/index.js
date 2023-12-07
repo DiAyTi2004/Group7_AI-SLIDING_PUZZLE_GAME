@@ -1,22 +1,19 @@
-var emptyTileRow = 1;
-var emptyTileCol = 2;
-var cellDisplacement = "70px";
-var goal_arr = [
-	[1, 2, 3, 4, 5],
-	[6, 7, 8, 9, 10],
-	[11, 12, 13, 14, 15],
-	[16, 17, 18, 19, 20],
-	[21, 22, 23, 24, 0]
+let emptyTileRow = 1;
+let emptyTileCol = 1;
+let cellDisplacement = "70px";
+let goal_arr = [
+	[1, 2],
+	[3, 0]
 ];
-heur = "man";
+let heur = "man";
 
-isWin = false;
-isShuffle = false;
+let isWin = false;
+let isShuffle = false;
 
 function moveTile() {
-	var pos = $(this).attr('data-pos');
-	var posRow = parseInt(pos.split(',')[0]);
-	var posCol = parseInt(pos.split(',')[1]);
+	let pos = $(this).attr('data-pos');
+	let posRow = parseInt(pos.split(',')[0]);
+	let posCol = parseInt(pos.split(',')[1]);
 
 	// Move tile down
 	if (posRow + 1 == emptyTileRow && posCol == emptyTileCol) {
@@ -92,7 +89,7 @@ window.onkeydown = function (e) {
 
 	// move to left
 	if (e.keyCode === 37) {
-		if (posCol == 4) return;
+		if (posCol == 1) return;
 		const nextElement = getCellByPosition(posRow, posCol + 1);
 
 		$(nextElement).animate({
@@ -128,7 +125,7 @@ window.onkeydown = function (e) {
 
 	// move to top
 	if (e.keyCode === 38) {
-		if (posRow == 4) return;
+		if (posRow == 1) return;
 		const nextElement = getCellByPosition(posRow + 1, posCol);
 
 
@@ -196,19 +193,17 @@ function ANode(value, state, emptyRow, emptyCol, depth) {
 	this.depth = depth;
 	this.strRepresentation = "";
 	this.path = "";
+	this.size = this.state.length;
 
-	for (var i = 0; i < state.length; i++) {
-		if (state[i].length != state.length) {
-			alert("No. of rows differ from no.of columns");
-			return false;
-		}
-
-		for (var j = 0; j < state[i].length; j++) {
+	for (let i = 0; i < state.length; i++) {
+		for (let j = 0; j < state[i].length; j++) {
 			this.strRepresentation += state[i][j] + ",";
 		}
 
-		this.size = this.state.length;
 	}
+
+	console.log("this.strRepresentation", this.strRepresentation);
+	console.log("chekcing type of init array: " + typeof (this.strRepresentation));
 }
 
 /**
@@ -236,7 +231,7 @@ function AStar(initial, goal, empty) {
 AStar.prototype.execute = function () {
 	this.visited.add(this.initial.strRepresentation);
 	while (this.queue.length > 0) {
-		var current = this.queue.dequeue();
+		let current = this.queue.dequeue();
 		if (current.strRepresentation == this.goal.strRepresentation) {
 			console.log("Solution found!");
 			return current;
@@ -246,11 +241,11 @@ AStar.prototype.execute = function () {
 }
 
 AStar.prototype.expandNode = function (node) {
-	var temp;
-	var newState;
-	var col = node.emptyCol;
-	var row = node.emptyRow;
-	var newNode;
+	let temp;
+	let newState;
+	let col = node.emptyCol;
+	let row = node.emptyRow;
+	let newNode;
 
 	// Up
 	if (row > 0) {
@@ -274,7 +269,7 @@ AStar.prototype.expandNode = function (node) {
 		temp = newState[row + 1][col];
 		newState[row + 1][col] = this.empty;
 		newState[row][col] = temp;
-		newNode = new ANode(0, newState, row + 1, col, node.depth);
+		newNode = new ANode(0, newState, row + 1, col, node.depth + 1);
 
 		if (!this.visited.contains(newNode.strRepresentation)) {
 			newNode.value = newNode.depth + this.heuristic(newNode);
@@ -326,7 +321,7 @@ AStar.prototype.heuristic = function (node) {
 }
 
 function getCurrentTileState() {
-	tileState = [[], [], [], [], []];
+	tileState = [[], []];
 
 	$(".start .cell").each(function (i, obj) {
 		temp_pos = $(this).attr("data-pos");
@@ -347,29 +342,30 @@ function start() {
 	emptyTileCol = parseInt(emptyPos.split(',')[1]);
 
 	initial_arr = getCurrentTileState();
+	console.log("chekcing init: " + initial_arr);
 
-	var init = new ANode(0, initial_arr, emptyTileRow, emptyTileCol, 0);
-	var goal = new ANode(0, goal_arr, 4, 4, 0);
-	var astar = new AStar(init, goal, 0);
+	let init = new ANode(0, initial_arr, emptyTileRow, emptyTileCol, 0);
+	let goal = new ANode(0, goal_arr, 1, 1, 0);
+	let astar = new AStar(init, goal, 0);
 
-	var startTime = new Date();
-	var result = astar.execute();
-	var endTime = new Date();
+	let startTime = new Date();
+	let result = astar.execute();
+	let endTime = new Date();
 	alert("Completed in " + (endTime - startTime) + "milliseconds.");
-	var panel = document.getElementById('panel');
+	let panel = document.getElementById('panel');
 	panel.innerHTML = "Solution: " + result.path + " Total steps: " + result.path.length + "<br />";
 	solution = result.path;
 }
 
 AStar.prototype.manhattanDistance = function (node) {
-	var result = 0;
+	let result = 0;
 
-	for (var i = 0; i < node.state.length; i++) {
-		for (var j = 0; j < node.state[i].length; j++) {
-			var elem = node.state[i][j];
-			var found = false;
-			for (var h = 0; h < this.goal.state.length; h++) {
-				for (var k = 0; k < this.goal.state[h].length; k++) {
+	for (let i = 0; i < node.state.length; i++) {
+		for (let j = 0; j < node.state[i].length; j++) {
+			let elem = node.state[i][j];
+			let found = false;
+			for (let h = 0; h < this.goal.state.length; h++) {
+				for (let k = 0; k < this.goal.state[h].length; k++) {
 					if (this.goal.state[h][k] == elem) {
 						result += Math.abs(h - i) + Math.abs(j - k);
 						found = true;
@@ -386,7 +382,7 @@ AStar.prototype.manhattanDistance = function (node) {
 
 step = 0;
 function showSolution() {
-	var move = '';
+	let move = '';
 	if (!solution) return;
 	if (step < solution.length) {
 
@@ -429,51 +425,26 @@ function shuffle(array) {
 }
 
 function movementMap(dataPos) {
-	if (dataPos == "0,0") return ["0,1", "1,0"];
-	if (dataPos == "0,1") return ["0,0", "0,2", "1,1"];
-	if (dataPos == "0,2") return ["0,1", "0,3", "1,2"];
-	if (dataPos == "0,3") return ["0,2", "0,4", "1,3"];
-	if (dataPos == "0,4") return ["0,3", "1,4"];
-
-	if (dataPos == "1,0") return ["0,0", "1,1", "2,0"];
-	if (dataPos == "1,1") return ["0,1", "1,0", "1,2", "2,1"];
-	if (dataPos == "1,2") return ["0,2", "1,1", "1,3", "2,2"];
-	if (dataPos == "1,3") return ["0,3", "1,2", "1,4", "2,3"];
-	if (dataPos == "1,4") return ["0,4", "1,3", "2,4"];
-
-	if (dataPos == "2,0") return ["1,0", "2,1", "3,0"];
-	if (dataPos == "2,1") return ["1,1", "2,0", "2,2", "3,1"];
-	if (dataPos == "2,2") return ["1,2", "2,1", "2,3", "3,2"];
-	if (dataPos == "2,3") return ["1,3", "2,2", "2,4", "3,3"];
-	if (dataPos == "2,4") return ["1,4", "2,3", "3,4"];
-
-	if (dataPos == "3,0") return ["2,0", "3,1", "4,0"];
-	if (dataPos == "3,1") return ["2,1", "3,0", "3,2", "4,1"];
-	if (dataPos == "3,2") return ["2,2", "3,1", "3,3", "4,2"];
-	if (dataPos == "3,3") return ["2,3", "3,2", "3,4", "4,3"];
-	if (dataPos == "3,4") return ["2,4", "3,3", "4,4"];
-
-	if (dataPos == "4,0") return ["3,0", "4,1"];
-	if (dataPos == "4,1") return ["3,1", "4,0", "4,2"];
-	if (dataPos == "4,2") return ["3,2", "4,1", "4,3"];
-	if (dataPos == "4,3") return ["3,3", "4,2", "4,4"];
-	if (dataPos == "4,4") return ["3,4", "4,3"];
+	if (dataPos === "0,0") return ["0,1", "1,0"];
+	if (dataPos === "0,1") return ["0,0", "1,1"];
+	if (dataPos === "1,0") return ["0,0", "1,1"];
+	if (dataPos === "1,1") return ["0,1", "1,0"];
 
 	return [];
 }
 
 function roundToNearest70(value) {
-	var numericValue = parseFloat(value); // Extract numeric part
-	var roundedValue = Math.round(numericValue / 70) * 70; // Round to nearest multiple of 70
+	let numericValue = parseFloat(value); // Extract numeric part
+	let roundedValue = Math.round(numericValue / 70) * 70; // Round to nearest multiple of 70
 	return roundedValue + "px";
 }
 
 function alignTiles() {
 	$(".start .cell").each(function (i, obj) {
-		var style = window.getComputedStyle(this);
+		let style = window.getComputedStyle(this);
 
-		var topValue = style.getPropertyValue("top");
-		var rightValue = style.getPropertyValue("right");
+		let topValue = style.getPropertyValue("top");
+		let rightValue = style.getPropertyValue("right");
 
 		this.style.top = roundToNearest70(topValue);
 		this.style.right = roundToNearest70(rightValue);
@@ -482,21 +453,17 @@ function alignTiles() {
 }
 
 function shuffleTiles() {
-	var shuffleCounter = 0;
-	var lastShuffled;
+
+	let shuffleCounter = 0;
 	isShuffle = true;
 	isWin = false;
 	step = 0;
-	while (shuffleCounter < 20) {
-		emptyPos = $("#empty").attr("data-pos");
-		validTiles = movementMap(emptyPos);
-		randomPos = validTiles[Math.floor(Math.random() * validTiles.length)];
-		if (lastShuffled != randomPos) {
-			shuffleCounter++;
-			lastShuffled = randomPos;
-			$("div[data-pos='" + randomPos + "']").click();
-
-		}
+	while (shuffleCounter < 5) {
+		const emptyPos = $("#empty").attr("data-pos");
+		const validTiles = movementMap(emptyPos);
+		const randomPos = validTiles[Math.floor(Math.random() * validTiles.length)];
+		shuffleCounter++;
+		$("div[data-pos='" + randomPos + "']").click();
 	}
 	isShuffle = false;
 
@@ -504,9 +471,9 @@ function shuffleTiles() {
 }
 
 function checkWinCondition() {
-	var tilePos = getCurrentTileState();
-	for (var i = 0; i < 5; i++) {
-		for (var j = 0; j < 5; j++) {
+	let tilePos = getCurrentTileState();
+	for (let i = 0; i < 2; i++) {
+		for (let j = 0; j < 2; j++) {
 			if (tilePos[i][j] != goal_arr[i][j]) return false;
 		}
 	}
